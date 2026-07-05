@@ -1,21 +1,20 @@
-import { useCallback } from 'react'
-import { trpc } from '@/lib/trpc'
+import { useCallback } from "react"
+import { trpc } from "@/lib/trpc"
 
 export function useAuth() {
+  const utils = trpc.useUtils()
   const { data: user, isLoading } = trpc.auth.me.useQuery()
-  const logoutMutation = trpc.auth.logout.useMutation()
+  const logoutMutation = trpc.auth.logout.useMutation({
+    onSuccess: () => {
+      localStorage.removeItem("token")
+      utils.auth.me.invalidate()
+      window.location.href = "/"
+    },
+  })
 
-  const logout = useCallback(async () => {
-    await logoutMutation.mutateAsync()
-    localStorage.removeItem('token')
-    window.location.href = '/'
+  const logout = useCallback(() => {
+    logoutMutation.mutate()
   }, [logoutMutation])
 
-  return {
-    user: user ?? null,
-    isLoading,
-    logout,
-    isAuthenticated: !!user,
-    isAdmin: user?.role === 'admin',
-  }
+  return { user, isLoading, logout }
 }
