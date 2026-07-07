@@ -60,6 +60,7 @@ export const donations = mysqlTable(
     reviewNote: text('reviewNote'),
     reviewedBy: int('reviewedBy'),
     reviewedAt: timestamp('reviewedAt'),
+    processedAt: timestamp('processed_at').default(null),  // ← ADD THIS LINE
     createdAt: timestamp('createdAt').defaultNow(),
   },
   (table) => ({
