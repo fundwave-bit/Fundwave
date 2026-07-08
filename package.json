@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc && vite build --mode client && vite build",
+    "start": "node dist/server/index.js",
     "preview": "vite preview",
     "db:push": "drizzle-kit push:mysql",
     "db:migrate": "drizzle-kit migrate",
